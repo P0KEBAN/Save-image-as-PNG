@@ -111,14 +111,3 @@ header h1 {
   line-height: 1.4;
 }
 
-.footer {
-  min-height: 16px;
-  display: flex;
-  align-items: center;
-}
-
-#status-text {
-  font-size: 11px;
-  color: var(--text-muted);
-  transition: color 0.2s ease;
-}
