@@ -3,17 +3,12 @@ import {
   formatDateStamp,
   MENU_ID,
   MENU_TITLE,
-  MESSAGE_TYPES,
   NOTIFICATION_ICON_PATH,
-  OFFSCREEN_DOCUMENT_PATH,
-  OFFSCREEN_JUSTIFICATION,
-  OFFSCREEN_REASONS,
   SAVE_MODES
 } from "./lib/constants.js";
 import { ensureDefaultSettings, readSettings } from "./lib/settings.js";
 
 let setupPromise = Promise.resolve();
-let offscreenDocumentPromise = null;
 
 chrome.runtime.onInstalled.addListener(() => {
   queueSetup();
@@ -56,12 +51,9 @@ async function rebuildContextMenu() {
 async function saveImageAsPng(info, tab) {
   await setupPromise;
 
-  let source = null;
-  let downloadStarted = false;
-
   try {
     const settings = await readSettings();
-    source = await createDownloadSource(info, tab);
+    const source = await createDownloadSource(info, tab);
     const filename = buildFileName(source);
 
     await downloadFile({
@@ -69,26 +61,24 @@ async function saveImageAsPng(info, tab) {
       filename,
       saveAs: settings.saveMode === SAVE_MODES.PROMPT
     });
-
-    downloadStarted = true;
   } catch (error) {
     console.error("PNG save failed", error);
     await notifyFailure(error);
-  } finally {
-    if (!downloadStarted) {
-      await cleanupDownloadSource(source, tab, info.frameId);
-    }
   }
 }
 
 async function createDownloadSource(info, tab) {
-  const pageSource = await tryCreatePageDownloadSource(info, tab);
+  if (info.srcUrl.startsWith("blob:")) {
+    const pageSource = await tryCreatePageDownloadSource(info, tab);
 
-  if (pageSource) {
-    return pageSource;
+    if (pageSource) {
+      return pageSource;
+    }
+
+    throw new Error("blob URL is not available outside the page context.");
   }
 
-  return createOffscreenDownloadSource(info.srcUrl);
+  return createExtensionDownloadSource(info.srcUrl);
 }
 
 async function tryCreatePageDownloadSource(info, tab) {
@@ -109,129 +99,31 @@ async function tryCreatePageDownloadSource(info, tab) {
       return null;
     }
 
-    return {
-      ...payload,
-      cleanupTarget: {
-        kind: "page",
-        tabId: tab.id,
-        frameId: info.frameId
-      }
-    };
+    return payload;
   } catch (error) {
-    console.warn("Page-context conversion failed. Falling back to the extension context.", error);
+    console.warn("Page-context conversion failed.", error);
     return null;
   }
 }
 
-async function createOffscreenDownloadSource(srcUrl) {
-  await ensureOffscreenDocument();
-  const payload = await sendRuntimeMessage({
-    type: MESSAGE_TYPES.OFFSCREEN_CONVERT_TO_PNG,
-    srcUrl
+async function createExtensionDownloadSource(srcUrl) {
+  const response = await fetch(srcUrl, {
+    credentials: "include"
   });
+
+  if (!response.ok) {
+    throw new Error(`Image fetch failed with status ${response.status}.`);
+  }
+
+  const sourceBlob = await response.blob();
+  const pngBlob = await convertBlobToPng(sourceBlob);
+  const downloadUrl = await blobToDataUrl(pngBlob);
 
   return {
-    ...payload,
-    cleanupTarget: {
-      kind: "offscreen"
-    }
+    downloadUrl,
+    finalUrl: response.url || srcUrl,
+    headerFileName: readHeaderFileNameValue(response.headers.get("content-disposition") || "")
   };
-}
-
-async function ensureOffscreenDocument() {
-  if (await hasOffscreenDocument()) {
-    return;
-  }
-
-  if (!offscreenDocumentPromise) {
-    offscreenDocumentPromise = chrome.offscreen.createDocument({
-      url: OFFSCREEN_DOCUMENT_PATH,
-      reasons: [...OFFSCREEN_REASONS],
-      justification: OFFSCREEN_JUSTIFICATION
-    }).catch(async (error) => {
-      if (await hasOffscreenDocument()) {
-        return;
-      }
-
-      throw error;
-    }).finally(() => {
-      offscreenDocumentPromise = null;
-    });
-  }
-
-  await offscreenDocumentPromise;
-}
-
-async function hasOffscreenDocument() {
-  const offscreenUrl = chrome.runtime.getURL(OFFSCREEN_DOCUMENT_PATH);
-
-  if (chrome.runtime.getContexts) {
-    const contexts = await chrome.runtime.getContexts({
-      contextTypes: ["OFFSCREEN_DOCUMENT"],
-      documentUrls: [offscreenUrl]
-    });
-
-    return contexts.length > 0;
-  }
-
-  const matchedClients = await clients.matchAll();
-  return matchedClients.some((client) => client.url === offscreenUrl);
-}
-
-async function cleanupDownloadSource(source, tab, frameId) {
-  if (!source?.downloadUrl) {
-    return;
-  }
-
-  try {
-    if (source.cleanupTarget?.kind === "page" && tab?.id) {
-      await chrome.scripting.executeScript({
-        target: buildScriptTarget(tab.id, frameId),
-        world: "MAIN",
-        func: revokeObjectUrlInPage,
-        args: [source.downloadUrl]
-      });
-      return;
-    }
-
-    if (source.cleanupTarget?.kind === "offscreen") {
-      await ensureOffscreenDocument();
-      await sendRuntimeMessage({
-        type: MESSAGE_TYPES.OFFSCREEN_REVOKE_OBJECT_URL,
-        downloadUrl: source.downloadUrl
-      });
-    }
-  } catch (error) {
-    console.warn("Could not clean up a temporary download URL.", error);
-  }
-}
-
-function buildScriptTarget(tabId, frameId) {
-  const target = { tabId };
-
-  if (Number.isInteger(frameId) && frameId >= 0) {
-    target.frameIds = [frameId];
-  }
-
-  return target;
-}
-
-function sendRuntimeMessage(message) {
-  return new Promise((resolve, reject) => {
-    chrome.runtime.sendMessage(message, (response) => {
-      if (chrome.runtime.lastError) {
-        reject(new Error(chrome.runtime.lastError.message));
-        return;
-      }
-
-      if (!response?.ok) {
-        reject(new Error(response?.error || "Extension message failed."));
-        return;
-      }
-
-      resolve(response.payload || null);
-    });
-  });
 }
 
 async function notifyFailure(error) {
@@ -281,6 +173,10 @@ function toUserMessage(error) {
     detail.includes("createImageBitmap")
   ) {
     return "画像を PNG に変換できませんでした。";
+  }
+
+  if (detail.includes("downloads API is unavailable")) {
+    return "ダウンロード API が使えません。拡張機能を再読み込みしてください。";
   }
 
   return `画像を保存できませんでした: ${detail}`;
@@ -348,6 +244,10 @@ function createContextMenu(options) {
 }
 
 function downloadFile(options) {
+  if (!chrome.downloads?.download) {
+    throw new Error("The downloads API is unavailable.");
+  }
+
   return new Promise((resolve, reject) => {
     chrome.downloads.download(
       {
@@ -364,6 +264,38 @@ function downloadFile(options) {
       }
     );
   });
+}
+
+async function convertBlobToPng(sourceBlob) {
+  const imageBitmap = await createImageBitmap(sourceBlob);
+
+  try {
+    const canvas = new OffscreenCanvas(imageBitmap.width, imageBitmap.height);
+    const context = canvas.getContext("2d");
+
+    if (!context) {
+      throw new Error("Could not create a 2D context.");
+    }
+
+    context.drawImage(imageBitmap, 0, 0);
+    return canvas.convertToBlob({ type: "image/png" });
+  } finally {
+    imageBitmap.close();
+  }
+}
+
+async function blobToDataUrl(blob) {
+  const buffer = await blob.arrayBuffer();
+  const bytes = new Uint8Array(buffer);
+  const chunkSize = 0x8000;
+  let binary = "";
+
+  for (let index = 0; index < bytes.length; index += chunkSize) {
+    const chunk = bytes.subarray(index, index + chunkSize);
+    binary += String.fromCharCode(...chunk);
+  }
+
+  return `data:${blob.type};base64,${btoa(binary)}`;
 }
 
 async function createPagePngDownloadSource(srcUrl) {
@@ -394,41 +326,26 @@ async function createPagePngDownloadSource(srcUrl) {
     }
 
     context.drawImage(imageBitmap, 0, 0);
-
-    const pngBlob = await new Promise((resolve, reject) => {
-      canvas.toBlob((blob) => {
-        if (!blob) {
-          reject(new Error("Could not convert the canvas to PNG."));
-          return;
-        }
-
-        resolve(blob);
-      }, "image/png");
-    });
-
-    const downloadUrl = URL.createObjectURL(pngBlob);
-    scheduleObjectUrlCleanup(downloadUrl);
+    const downloadUrl = canvas.toDataURL("image/png");
 
     return {
       downloadUrl,
-      finalUrl: response.url || srcUrl,
-      headerFileName: readHeaderFileNameValue(response.headers.get("content-disposition") || "")
+      finalUrl: srcUrl,
+      headerFileName: ""
     };
   } finally {
     imageBitmap.close();
   }
 }
 
-function revokeObjectUrlInPage(downloadUrl) {
-  if (typeof downloadUrl === "string" && downloadUrl) {
-    URL.revokeObjectURL(downloadUrl);
-  }
-}
+function buildScriptTarget(tabId, frameId) {
+  const target = { tabId };
 
-function scheduleObjectUrlCleanup(downloadUrl) {
-  setTimeout(() => {
-    URL.revokeObjectURL(downloadUrl);
-  }, 120000);
+  if (Number.isInteger(frameId) && frameId >= 0) {
+    target.frameIds = [frameId];
+  }
+
+  return target;
 }
 
 function readHeaderFileNameValue(contentDisposition) {

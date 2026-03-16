@@ -20,16 +20,20 @@ form.addEventListener("change", async (event) => {
   }
 });
 
-chrome.storage.onChanged.addListener((changes, areaName) => {
-  if (areaName !== "local" || !changes.saveMode?.newValue) {
-    return;
+chrome.storage?.onChanged?.addListener((changes, areaName) => {
+  if (areaName === "local" && changes.saveMode?.newValue) {
+    syncSelection(changes.saveMode.newValue);
   }
-
-  const nextMode = changes.saveMode.newValue;
-  syncSelection(nextMode);
 });
 
 async function initializePopup() {
+  if (!chrome.storage?.local) {
+    console.warn("The storage API is unavailable in this context.");
+    syncSelection(SAVE_MODES.INSTANT);
+    setFormEnabled(false);
+    return;
+  }
+
   try {
     const settings = await readSettings();
     syncSelection(settings.saveMode);
@@ -42,5 +46,11 @@ async function initializePopup() {
 function syncSelection(saveMode) {
   for (const radio of radios) {
     radio.checked = radio.value === saveMode;
+  }
+}
+
+function setFormEnabled(enabled) {
+  for (const radio of radios) {
+    radio.disabled = !enabled;
   }
 }
