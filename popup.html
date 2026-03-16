@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>画像をPNGで保存</title>
+    <link rel="stylesheet" href="popup.css">
+  </head>
+  <body>
+    <main class="popup-shell">
+      <section class="hero">
+        <p class="eyebrow">Save image as PNG</p>
+        <h1>画像をPNGで保存</h1>
+        <p class="summary">
+          右クリックからの保存方法だけを、ここで切り替えます。
+        </p>
+      </section>
+
+      <section class="panel" aria-labelledby="mode-title">
+        <div class="panel-head">
+          <p class="panel-label">Setting</p>
+          <h2 id="mode-title">保存モード</h2>
+        </div>
+
+        <form id="mode-form" class="mode-list">
+          <label class="mode-card" for="mode-instant">
+            <input
+              id="mode-instant"
+              type="radio"
+              name="saveMode"
+              value="instant"
+            >
+            <span class="mode-copy">
+              <span class="mode-title">ダウンロードフォルダに即保存</span>
+              <span class="mode-description">確認なしでそのまま保存します。</span>
+            </span>
+          </label>
+
+          <label class="mode-card" for="mode-prompt">
+            <input
+              id="mode-prompt"
+              type="radio"
+              name="saveMode"
+              value="prompt"
+            >
+            <span class="mode-copy">
+              <span class="mode-title">保存先を選ぶ</span>
+              <span class="mode-description">保存ダイアログを開いて保存先を選びます。</span>
+            </span>
+          </label>
+        </form>
+      </section>
+
+      <footer class="status-bar">
+        <span id="status-text">設定を読み込み中...</span>
+      </footer>
+    </main>
+
+    <script type="module" src="popup.js"></script>
+  </body>
+</html>
