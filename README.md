@@ -1,4 +1,4 @@
-# Save image as PNG / Chrome拡張：画像をPNGで保存
+# Save image as PNG / 画像をPNGで保存
 
 Chrome で画像を右クリックし、PNG に変換して保存する自分用拡張です。
 
