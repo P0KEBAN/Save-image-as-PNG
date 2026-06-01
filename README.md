@@ -99,4 +99,4 @@ Click the extension icon to open the popup and toggle between two modes:
 
 ## 📄 License
 
-MIT License © 2025
+MIT License © 2025 P0KEBAN

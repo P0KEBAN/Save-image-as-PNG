@@ -99,4 +99,4 @@
 
 ## 📄 ライセンス
 
-MIT License © 2025
+MIT License © 2025 P0KEBAN
