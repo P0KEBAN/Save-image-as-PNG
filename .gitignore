@@ -1,1 +1,37 @@
+# Backup files
 icons_backup/
+
+# Operating System Files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDEs and Text Editors
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Node.js / Build tools (もし今後ライブラリやビルドツールを使う場合)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+dist/
+build/
+
+# Local Environment Variables
+.env
+.env.local
+.env.*.local
+
+# Log files
+*.log
