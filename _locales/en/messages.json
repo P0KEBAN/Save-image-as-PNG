@@ -1,0 +1,72 @@
+{
+  "extName": {
+    "message": "Save image as PNG",
+    "description": "Extension name."
+  },
+  "extDescription": {
+    "message": "Right-click an image and save it as PNG.",
+    "description": "Extension description."
+  },
+  "actionTitle": {
+    "message": "Save image as PNG",
+    "description": "Toolbar button tooltip."
+  },
+  "menuTitle": {
+    "message": "Save as PNG",
+    "description": "Context menu item title."
+  },
+  "popupHeading": {
+    "message": "Save image as PNG",
+    "description": "Heading shown in the popup."
+  },
+  "modeInstantTitle": {
+    "message": "Save instantly",
+    "description": "Instant save mode title."
+  },
+  "modeInstantDescription": {
+    "message": "Save to the downloads folder without confirmation.",
+    "description": "Instant save mode description."
+  },
+  "modePromptTitle": {
+    "message": "Choose location",
+    "description": "Prompt save mode title."
+  },
+  "modePromptDescription": {
+    "message": "Pick a destination each time with a dialog.",
+    "description": "Prompt save mode description."
+  },
+  "notifyFailureTitle": {
+    "message": "Failed to save as PNG",
+    "description": "Failure notification title."
+  },
+  "errorGeneric": {
+    "message": "Could not save the image as PNG.",
+    "description": "Generic save failure message."
+  },
+  "errorBlob": {
+    "message": "This image is only available in the current page context and could not be saved.",
+    "description": "Blob URL failure message."
+  },
+  "errorFetch": {
+    "message": "Could not fetch the image. Check your login status or the site's restrictions.",
+    "description": "Image fetch failure message."
+  },
+  "errorConvert": {
+    "message": "Could not convert the image to PNG.",
+    "description": "PNG conversion failure message."
+  },
+  "errorDownloadsApi": {
+    "message": "The downloads API is unavailable. Please reload the extension.",
+    "description": "Downloads API unavailable message."
+  },
+  "errorSaveWithDetail": {
+    "message": "Could not save the image: $detail$",
+    "description": "Save failure message with detail.",
+    "placeholders": {
+      "detail": {
+        "content": "$1",
+        "example": "Image fetch failed with status 404."
+      }
+    }
+  }
+}

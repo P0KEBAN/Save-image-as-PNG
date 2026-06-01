@@ -1,0 +1,72 @@
+{
+  "extName": {
+    "message": "画像をPNGで保存",
+    "description": "Extension name."
+  },
+  "extDescription": {
+    "message": "画像を右クリックしてPNGとして保存します。",
+    "description": "Extension description."
+  },
+  "actionTitle": {
+    "message": "画像をPNGで保存",
+    "description": "Toolbar button tooltip."
+  },
+  "menuTitle": {
+    "message": "PNGとして保存",
+    "description": "Context menu item title."
+  },
+  "popupHeading": {
+    "message": "画像をPNGで保存",
+    "description": "Heading shown in the popup."
+  },
+  "modeInstantTitle": {
+    "message": "即保存",
+    "description": "Instant save mode title."
+  },
+  "modeInstantDescription": {
+    "message": "確認なしでダウンロードフォルダへ保存します。",
+    "description": "Instant save mode description."
+  },
+  "modePromptTitle": {
+    "message": "保存先を選択",
+    "description": "Prompt save mode title."
+  },
+  "modePromptDescription": {
+    "message": "都度ダイアログで保存先を指定します。",
+    "description": "Prompt save mode description."
+  },
+  "notifyFailureTitle": {
+    "message": "PNGとして保存に失敗しました",
+    "description": "Failure notification title."
+  },
+  "errorGeneric": {
+    "message": "画像を PNG として保存できませんでした。",
+    "description": "Generic save failure message."
+  },
+  "errorBlob": {
+    "message": "この画像は現在のページ文脈でしか取得できず、保存できませんでした。",
+    "description": "Blob URL failure message."
+  },
+  "errorFetch": {
+    "message": "画像を取得できませんでした。ログイン状態やサイト側の制限を確認してください。",
+    "description": "Image fetch failure message."
+  },
+  "errorConvert": {
+    "message": "画像を PNG に変換できませんでした。",
+    "description": "PNG conversion failure message."
+  },
+  "errorDownloadsApi": {
+    "message": "ダウンロード API が使えません。拡張機能を再読み込みしてください。",
+    "description": "Downloads API unavailable message."
+  },
+  "errorSaveWithDetail": {
+    "message": "画像を保存できませんでした: $detail$",
+    "description": "Save failure message with detail.",
+    "placeholders": {
+      "detail": {
+        "content": "$1",
+        "example": "Image fetch failed with status 404."
+      }
+    }
+  }
+}

@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ja">
+<html lang="en">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -9,7 +9,7 @@
   <body>
     <main class="container">
       <header>
-        <h1>Save image as PNG</h1>
+        <h1 data-i18n="popupHeading">Save image as PNG</h1>
       </header>
 
       <form id="mode-form" class="mode-select">
@@ -17,8 +17,8 @@
           <input type="radio" id="mode-instant" name="saveMode" value="instant">
           <span class="custom-radio"></span>
           <div class="label-text">
-            <strong>即保存</strong>
-            <span>確認なしでダウンロードフォルダへ保存</span>
+            <strong data-i18n="modeInstantTitle">Save instantly</strong>
+            <span data-i18n="modeInstantDescription">Save to the downloads folder without confirmation.</span>
           </div>
         </label>
 
@@ -26,8 +26,8 @@
           <input type="radio" id="mode-prompt" name="saveMode" value="prompt">
           <span class="custom-radio"></span>
           <div class="label-text">
-            <strong>保存先を選択</strong>
-            <span>都度ダイアログで保存先を指定</span>
+            <strong data-i18n="modePromptTitle">Choose location</strong>
+            <span data-i18n="modePromptDescription">Pick a destination each time with a dialog.</span>
           </div>
         </label>
       </form>

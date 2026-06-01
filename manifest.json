@@ -1,8 +1,9 @@
 {
   "manifest_version": 3,
-  "name": "Save image as PNG / 画像をPNGで保存",
+  "name": "__MSG_extName__",
   "version": "0.1.0",
-  "description": "Right-click an image and save it as PNG.",
+  "description": "__MSG_extDescription__",
+  "default_locale": "en",
   "permissions": [
     "contextMenus",
     "downloads",
@@ -18,7 +19,7 @@
     "type": "module"
   },
   "action": {
-    "default_title": "画像をPNGで保存",
+    "default_title": "__MSG_actionTitle__",
     "default_popup": "popup.html",
     "default_icon": {
       "16": "icons/icon_16.png",

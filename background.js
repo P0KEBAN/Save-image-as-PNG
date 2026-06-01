@@ -131,7 +131,7 @@ async function notifyFailure(error) {
     await createNotification({
       type: "basic",
       iconUrl: NOTIFICATION_ICON_PATH,
-      title: "PNGとして保存に失敗しました",
+      title: chrome.i18n.getMessage("notifyFailureTitle"),
       message: toUserMessage(error)
     });
   } catch (notificationError) {
@@ -156,15 +156,15 @@ function toUserMessage(error) {
   const detail = error instanceof Error ? error.message : String(error || "");
 
   if (!detail) {
-    return "画像を PNG として保存できませんでした。";
+    return chrome.i18n.getMessage("errorGeneric");
   }
 
   if (detail.includes("blob URL")) {
-    return "この画像は現在のページ文脈でしか取得できず、保存できませんでした。";
+    return chrome.i18n.getMessage("errorBlob");
   }
 
   if (detail.includes("Image fetch failed") || detail.includes("Failed to fetch")) {
-    return "画像を取得できませんでした。ログイン状態やサイト側の制限を確認してください。";
+    return chrome.i18n.getMessage("errorFetch");
   }
 
   if (
@@ -172,14 +172,14 @@ function toUserMessage(error) {
     detail.includes("convert the canvas to PNG") ||
     detail.includes("createImageBitmap")
   ) {
-    return "画像を PNG に変換できませんでした。";
+    return chrome.i18n.getMessage("errorConvert");
   }
 
   if (detail.includes("downloads API is unavailable")) {
-    return "ダウンロード API が使えません。拡張機能を再読み込みしてください。";
+    return chrome.i18n.getMessage("errorDownloadsApi");
   }
 
-  return `画像を保存できませんでした: ${detail}`;
+  return chrome.i18n.getMessage("errorSaveWithDetail", [detail]);
 }
 
 function buildFileName(source) {

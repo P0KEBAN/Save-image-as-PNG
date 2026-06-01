@@ -4,7 +4,25 @@ import { readSettings, writeSaveMode } from "./lib/settings.js";
 const form = document.querySelector("#mode-form");
 const radios = Array.from(form.elements.saveMode);
 
+localizeDocument();
 void initializePopup();
+
+function localizeDocument() {
+  document.documentElement.lang = chrome.i18n.getUILanguage();
+
+  const heading = chrome.i18n.getMessage("popupHeading");
+  if (heading) {
+    document.title = heading;
+  }
+
+  for (const element of document.querySelectorAll("[data-i18n]")) {
+    const message = chrome.i18n.getMessage(element.dataset.i18n);
+
+    if (message) {
+      element.textContent = message;
+    }
+  }
+}
 
 form.addEventListener("change", async (event) => {
   const target = event.target;
