@@ -1,120 +1,120 @@
 <div align="center">
 
-<img src="icons/icon_128.png" alt="Save image as PNG" width="96" height="96">
+<img src="icons/icon_128.png" alt="画像をPNGで保存" width="96" height="96">
 
-# Save image as PNG
+# 画像をPNGで保存
 
-**Right-click any image in Chrome → Convert and save it as PNG**
+**Chrome で画像を右クリック → PNG に変換して保存する拡張機能**
 
 [![Chrome Extension](https://img.shields.io/badge/Chrome-Extension-4285F4?logo=googlechrome&logoColor=white)](https://developer.chrome.com/docs/extensions/)
 [![Manifest V3](https://img.shields.io/badge/Manifest-V3-34A853?logo=googlechrome&logoColor=white)](https://developer.chrome.com/docs/extensions/mv3/intro/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Version](https://img.shields.io/badge/version-0.1.0-blue)](manifest.json)
 
-English | **[日本語はこちら](README.ja.md)**
+日本語 | **[English](README.en.md)**
 
 ---
 
-<img src="docs/screenshot.png" alt="Context menu screenshot" width="400">
+<img src="docs/screenshot.png" alt="コンテキストメニューのスクリーンショット" width="400">
 
-*▲ Right-click on an image to see the "Save as PNG" option*
+*▲ 画像を右クリックすると「PNGとして保存」が表示されます*
 
 </div>
 
-## ✨ Features
+## ✨ 機能
 
-| Feature | Description |
+| 機能 | 説明 |
 |:---|:---|
-| 🖼️ PNG Conversion | Convert and download any right-clicked image as PNG |
-| 🎯 Context Menu | "Save as PNG" appears only on image right-click |
-| ⚡ Instant Save | Save directly to downloads folder without prompts |
-| 📂 Save As | Choose a destination each time via save dialog |
-| 💾 Persistent Settings | Save mode preference stored in `chrome.storage.local` |
-| 🔢 Auto-numbering | Duplicate filenames are auto-renamed via Chrome's `uniquify` |
-| 🔔 Failure Notification | Shows a notification with the reason when a save fails |
-| 🌐 English / Japanese | Follows Chrome's display language |
+| 🖼️ PNG 変換保存 | 右クリックした画像を PNG に変換してダウンロード |
+| 🎯 コンテキストメニュー | 画像上でのみ「PNGとして保存」メニューを表示 |
+| ⚡ 即保存モード | 確認なしでダウンロードフォルダへ直接保存 |
+| 📂 保存先選択モード | ダイアログで保存先を都度指定 |
+| 💾 設定の永続化 | `chrome.storage.local` でモード設定を保持 |
+| 🔢 自動連番 | 同名ファイルは Chrome の `uniquify` で自動リネーム |
+| 🔔 失敗通知 | 保存できなかったときは理由を通知で表示 |
+| 🌐 日本語 / 英語 | Chrome の表示言語に合わせて切り替え |
 
-## 🚀 Installation
+## 🚀 インストール
 
-1. Clone or download this repository
+1. このリポジトリをクローンまたはダウンロード
 
    ```bash
    git clone https://github.com/P0KEBAN/save-image-as-png.git
    ```
 
-2. Open [`chrome://extensions`](chrome://extensions) in Chrome
+2. Chrome で [`chrome://extensions`](chrome://extensions) を開く
 
-3. Enable **Developer mode** (top-right toggle)
+3. 右上の **「デベロッパーモード」** を有効化
 
-4. Click **"Load unpacked"**
+4. **「パッケージ化されていない拡張機能を読み込む」** をクリック
 
-5. Select the cloned folder
+5. クローンしたフォルダを選択
 
-## 📖 Usage
+## 📖 使い方
 
-### Saving an image
+### 画像を保存する
 
-1. **Right-click** on any image on a web page
-2. Select **"Save as PNG"** from the context menu
-3. The image is converted to PNG and saved 🎉
+1. 任意の Web ページで画像を **右クリック**
+2. コンテキストメニューから **「PNGとして保存」** を選択
+3. 画像が PNG に変換されて保存されます 🎉
 
-### Switching save modes
+### 保存モードを切り替える
 
-Click the extension icon to open the popup and toggle between two modes:
+拡張機能アイコンをクリックするとポップアップが表示され、2 つのモードを切り替えられます。
 
-> | Mode | Behavior |
+> | モード | 動作 |
 > |:---|:---|
-> | **⚡ Instant Save** | Save directly to downloads folder |
-> | **📂 Save As** | Choose destination via file dialog each time |
+> | **⚡ 即保存** | 確認なしでダウンロードフォルダへ保存 |
+> | **📂 保存先を選択** | 都度ダイアログで保存先を指定 |
 
-## 🏗️ Project Structure
+## 🏗️ ファイル構成
 
 ```
 📦 save-image-as-png
-├── 📄 manifest.json      # Extension manifest (Manifest V3)
-├── 📄 background.js      # Service Worker / core logic
-├── 📄 popup.html          # Popup UI
-├── 📄 popup.css           # Popup styles
-├── 📄 popup.js            # Popup logic
-├── 📁 lib/                # Constants and settings storage
-├── 📁 _locales/           # UI strings (en / ja)
-├── 📁 icons/              # Extension icons (16/32/48/128px)
-└── 📁 docs/               # Screenshots
+├── 📄 manifest.json      # 拡張機能の設定ファイル (Manifest V3)
+├── 📄 background.js      # Service Worker / メインロジック
+├── 📄 popup.html          # ポップアップ UI
+├── 📄 popup.css           # ポップアップのスタイル
+├── 📄 popup.js            # ポップアップのロジック
+├── 📁 lib/                # 定数・設定の読み書き
+├── 📁 _locales/           # 表示文言 (en / ja)
+├── 📁 icons/              # 拡張機能アイコン (16/32/48/128px)
+└── 📁 docs/               # スクリーンショット
 ```
 
-## ⚠️ Notes
+## ⚠️ 注意事項
 
-### Permissions
+### 使用する権限
 
-| Permission | Purpose |
+| 権限 | 用途 |
 |:---|:---|
-| `contextMenus` | Add "Save as PNG" to the image right-click menu |
-| `downloads` | Save the converted PNG |
-| `storage` | Keep the save mode setting |
-| `notifications` | Notify when a save fails |
-| `scripting` | Convert `blob:` URL images to PNG inside the page |
-| `<all_urls>` (host permission) | Fetch images from any website |
+| `contextMenus` | 画像の右クリックメニューに「PNGとして保存」を追加 |
+| `downloads` | 変換した PNG を保存 |
+| `storage` | 保存モードの設定を保持 |
+| `notifications` | 保存に失敗したときの通知 |
+| `scripting` | `blob:` URL の画像をページ内で PNG に変換 |
+| `<all_urls>` (host permission) | 任意のサイトの画像を取得 |
 
 > [!NOTE]
-> The only network request is fetching the image you right-clicked. No images or browsing data are sent to external servers, and there is no analytics or tracking.
+> 通信は、右クリックした画像そのものを取得するときだけ行います。画像や閲覧情報を外部サーバーへ送信することはなく、解析・トラッキングも行いません。
 
-### Images that cannot or may not be saved
+### 保存できない・できない場合があるもの
 
 > [!WARNING]
-> - CSS background images (`background-image`) are not supported. The context menu does not appear on them.
-> - `blob:` URL images are converted inside the page when possible, but saving fails on some sites.
-> - Images that require login or are restricted by the site may fail to save.
+> - CSS 背景画像（`background-image`）は対象外です。右クリックメニューが表示されません。
+> - `blob:` URL の画像は、ページ内での変換を試みますが、サイトによっては保存できません。
+> - ログインが必要な画像や、サイト側で取得が制限されている画像は保存できないことがあります。
 
-## 🛠️ Tech Stack
+## 🛠️ 技術スタック
 
 - **Chrome Extensions Manifest V3**
-- **Service Worker**-based background processing
-- **Canvas API** for image-to-PNG conversion
-- **Chrome Downloads API** for file saving
-- **Chrome Storage API** for settings management
-- **Chrome Scripting API** for in-page conversion of `blob:` images
-- **Chrome i18n API** for English / Japanese localization
+- **Service Worker** ベースのバックグラウンド処理
+- **Canvas API** による画像→PNG 変換
+- **Chrome Downloads API** によるファイル保存
+- **Chrome Storage API** による設定管理
+- **Chrome Scripting API** による `blob:` 画像のページ内変換
+- **Chrome i18n API** による日本語 / 英語対応
 
-## 📄 License
+## 📄 ライセンス
 
 MIT License © 2026 P0KEBAN
