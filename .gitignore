@@ -1,6 +1,9 @@
 # Backup files
 icons_backup/
 
+# Internal documents (not published)
+private-docs/
+
 # Operating System Files
 .DS_Store
 .DS_Store?

@@ -31,6 +31,8 @@ English | **[日本語はこちら](README.ja.md)**
 | 📂 Save As | Choose a destination each time via save dialog |
 | 💾 Persistent Settings | Save mode preference stored in `chrome.storage.local` |
 | 🔢 Auto-numbering | Duplicate filenames are auto-renamed via Chrome's `uniquify` |
+| 🔔 Failure Notification | Shows a notification with the reason when a save fails |
+| 🌐 English / Japanese | Follows Chrome's display language |
 
 ## 🚀 Installation
 
@@ -74,20 +76,34 @@ Click the extension icon to open the popup and toggle between two modes:
 ├── 📄 popup.html          # Popup UI
 ├── 📄 popup.css           # Popup styles
 ├── 📄 popup.js            # Popup logic
+├── 📁 lib/                # Constants and settings storage
+├── 📁 _locales/           # UI strings (en / ja)
 ├── 📁 icons/              # Extension icons (16/32/48/128px)
-├── 📁 lib/                # Libraries
-└── 📁 docs/               # Documentation & screenshots
+└── 📁 docs/               # Screenshots
 ```
 
 ## ⚠️ Notes
 
+### Permissions
+
+| Permission | Purpose |
+|:---|:---|
+| `contextMenus` | Add "Save as PNG" to the image right-click menu |
+| `downloads` | Save the converted PNG |
+| `storage` | Keep the save mode setting |
+| `notifications` | Notify when a save fails |
+| `scripting` | Convert `blob:` URL images to PNG inside the page |
+| `<all_urls>` (host permission) | Fetch images from any website |
+
 > [!NOTE]
-> This extension uses the `<all_urls>` host permission to fetch image URLs from any website.
+> The only network request is fetching the image you right-clicked. No images or browsing data are sent to external servers, and there is no analytics or tracking.
+
+### Images that cannot or may not be saved
 
 > [!WARNING]
-> The following cases are currently unsupported:
-> - `blob:` URL images
-> - CSS background images (`background-image`)
+> - CSS background images (`background-image`) are not supported. The context menu does not appear on them.
+> - `blob:` URL images are converted inside the page when possible, but saving fails on some sites.
+> - Images that require login or are restricted by the site may fail to save.
 
 ## 🛠️ Tech Stack
 
@@ -96,7 +112,9 @@ Click the extension icon to open the popup and toggle between two modes:
 - **Canvas API** for image-to-PNG conversion
 - **Chrome Downloads API** for file saving
 - **Chrome Storage API** for settings management
+- **Chrome Scripting API** for in-page conversion of `blob:` images
+- **Chrome i18n API** for English / Japanese localization
 
 ## 📄 License
 
-MIT License © 2025 P0KEBAN
+MIT License © 2026 P0KEBAN
