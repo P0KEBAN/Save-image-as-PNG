@@ -36,11 +36,7 @@
 
 ## 🚀 インストール
 
-1. このリポジトリをクローンまたはダウンロード
-
-   ```bash
-   git clone https://github.com/P0KEBAN/save-image-as-png.git
-   ```
+1. [最新のリリース](https://github.com/P0KEBAN/Save-image-as-PNG/releases/latest) から `save-image-as-png-vX.X.X.zip` をダウンロードして解凍
 
 2. Chrome で [`chrome://extensions`](chrome://extensions) を開く
 
@@ -48,7 +44,21 @@
 
 4. **「パッケージ化されていない拡張機能を読み込む」** をクリック
 
-5. クローンしたフォルダを選択
+5. 解凍してできた `save-image-as-png` フォルダ（`manifest.json` が入っているフォルダ）を選択
+
+> [!TIP]
+> 読み込んだフォルダを移動・削除すると拡張機能が動かなくなります。解凍したフォルダは、消さない場所に置いてから読み込んでください。
+
+<details>
+<summary>開発者向け：リポジトリをクローンして使う</summary>
+
+```bash
+git clone https://github.com/P0KEBAN/Save-image-as-PNG.git
+```
+
+手順 2〜4 のあと、クローンしたフォルダを選択します。
+
+</details>
 
 ## 📖 使い方
 

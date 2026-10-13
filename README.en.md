@@ -36,11 +36,7 @@
 
 ## 🚀 Installation
 
-1. Clone or download this repository
-
-   ```bash
-   git clone https://github.com/P0KEBAN/save-image-as-png.git
-   ```
+1. Download `save-image-as-png-vX.X.X.zip` from the [latest release](https://github.com/P0KEBAN/Save-image-as-PNG/releases/latest) and unzip it
 
 2. Open [`chrome://extensions`](chrome://extensions) in Chrome
 
@@ -48,7 +44,21 @@
 
 4. Click **"Load unpacked"**
 
-5. Select the cloned folder
+5. Select the unzipped `save-image-as-png` folder (the one containing `manifest.json`)
+
+> [!TIP]
+> The extension stops working if you move or delete the loaded folder. Put the unzipped folder somewhere permanent before loading it.
+
+<details>
+<summary>For developers: clone the repository</summary>
+
+```bash
+git clone https://github.com/P0KEBAN/Save-image-as-PNG.git
+```
+
+After steps 2–4, select the cloned folder.
+
+</details>
 
 ## 📖 Usage
 
